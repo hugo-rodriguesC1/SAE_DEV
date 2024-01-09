@@ -67,3 +67,6 @@ onMounted(async () => {
       <button type="submit">Connexion</button>
     </form>
 </template>
+
+<style lang="scss" scoped>
+</style>
