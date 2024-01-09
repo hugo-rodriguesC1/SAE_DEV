@@ -1,8 +1,8 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import * as THREE from 'three';
-import { OrbitControls } from "../three.js-dev/examples/jsm/controls/OrbitControls.js";
-import { ColladaLoader } from "../three.js-dev/examples/jsm/loaders/ColladaLoader.js";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import { ColladaLoader } from "three/examples/jsm/loaders/ColladaLoader.js";
 
 
 const target = ref();
