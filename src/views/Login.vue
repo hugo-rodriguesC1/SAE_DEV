@@ -48,25 +48,36 @@ onMounted(async () => {
 </script>
 
 <template>
-  <form @submit.prevent="createAccount">
-    <label for="name">Nom d'utilisateur:</label>
-    <input v-model="name" type="text" id="name" required />
-
-    <label for="password">Mot de passe:</label>
-    <input v-model="password" type="password" id="password" required />
-
-    <button type="submit">Créer un compte</button>
-  </form>
-  <form @submit.prevent="Login">
-      <label for="loginName">Nom d'utilisateur:</label>
-      <input v-model="loginName" type="text" id="loginName" required />
-
-      <label for="loginPassword">Mot de passe:</label>
-      <input v-model="loginPassword" type="password" id="loginPassword" required />
-
-      <button type="submit">Connexion</button>
-    </form>
+  <div class="page">
+      <form @submit.prevent="createAccount" class="form">
+        <div class="form__name">
+            <label for="name">Nom d'utilisateur:</label>
+            <input v-model="name" type="text" id="name" required />
+        </div>
+        <div class="form__password">
+            <label for="password">Mot de passe:</label>
+            <input v-model="password" type="password" id="password" required />
+        </div>
+        <button class="form__button" type="submit">Créer un compte</button>
+      </form>
+      <form @submit.prevent="Login" class="form">
+          <div class="form__name">
+              <label for="loginName">Nom d'utilisateur:</label>
+              <input v-model="loginName" type="text" id="loginName" required />
+          </div>
+          <div class="form__password">
+              <label for="loginPassword">Mot de passe:</label>
+              <input v-model="loginPassword" type="password" id="loginPassword" required />
+          </div>
+          <button class="form__button" type="submit">Connexion</button>
+        </form>
+  </div>
 </template>
 
 <style lang="scss" scoped>
+.page {
+    background-color: $primary-color;
+    color: $secondary-color;
+    padding: rem(0) rem(100);
+}
 </style>
