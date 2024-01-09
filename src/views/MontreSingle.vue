@@ -3,7 +3,7 @@
 </script>
 
 <template>
-<div class="page">test single</div>
+<div class="page">Une montre</div>
 </template>
 
 <style lang="scss" scoped>

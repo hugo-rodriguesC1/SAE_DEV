@@ -31,7 +31,7 @@ const Login = () => {
 
   if (user) {
     console.log("Connexion réussie");
-    router.push("/montre-list")
+    router.push({ name: 'montre-list-id', params: { id: user.user_id } });
   } else {
     console.log("Échec de la connexion");
   }
