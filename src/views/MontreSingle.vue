@@ -51,7 +51,7 @@ function start () {
 
     //RENDERER
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setClearColor(0x1b1b1b, 1);
+    // renderer.setClearColor(0x1b1b1b, 1);
     SCREEN_WIDTH = document.body.scrollWidth;
     SCREEN_HEIGHT = document.body.scrollHeight;
     SCREEN_LEFT = document.body.offsetLeft - document.body.scrollLeft + document.body.clientLeft;
@@ -322,12 +322,45 @@ onMounted(()=>{
 </script>
 
 <template>
-  <div class="container">
-
+  <div class="page">
+    <div class="firstline">
+      <div class="firstline__content">
+        <p><span></span>WATCH</p>
+      </div>
+      <div class="firstline__content">
+        <p>3D VIEWER</p>
+      </div>
+      <div class="firstline__content">
+        <p>ADD TO CART</p>
+      </div>
+    </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
+.page {
+  position: absolute;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.firstline{
+  display: flex;
+  width: 100vw;
+  justify-content: space-between;
+  border-bottom: 1px solid $secondary-color;
+  &__content {
+    display: flex;
+    color: $secondary-color;
+    background-color: green;
+    width: fit-content;
+    height: fit-content;
+    padding: rem(10);
+}
+}
+
+
+
 
 
 
