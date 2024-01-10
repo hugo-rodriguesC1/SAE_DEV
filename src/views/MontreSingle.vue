@@ -5,7 +5,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { ColladaLoader } from "three/examples/jsm/loaders/ColladaLoader.js";
 
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(20,window.innerWidth / window.innerHeight, 1, 6000);
+const camera = new THREE.PerspectiveCamera(13,window.innerWidth / window.innerHeight, 1, 6000);
 const clock = new THREE.Clock();
 const renderer = new THREE.WebGLRenderer();
 const raycaster = new THREE.Raycaster();
@@ -51,7 +51,7 @@ function start () {
 
     //RENDERER
     renderer.setSize(window.innerWidth, window.innerHeight);
-    // renderer.setClearColor(0x1b1b1b, 1);
+    renderer.setClearColor(0x060606, 1);
     SCREEN_WIDTH = document.body.scrollWidth;
     SCREEN_HEIGHT = document.body.scrollHeight;
     SCREEN_LEFT = document.body.offsetLeft - document.body.scrollLeft + document.body.clientLeft;
@@ -317,6 +317,23 @@ function generate() {
 onMounted(()=>{    
     start()
     animate()
+
+
+    document.getElementById('bracelet').addEventListener("click", function(){
+      document.getElementById('braceletCustom').style='display:flex;'
+      document.getElementById('fondCustom').style='display:none;'
+      document.getElementById('boitierCustom').style='display:none;'
+    })
+    document.getElementById('fond').addEventListener("click", function(){
+      document.getElementById('fondCustom').style='display:flex;'
+      document.getElementById('braceletCustom').style='display:none;'
+      document.getElementById('boitierCustom').style='display:none;'
+    })
+    document.getElementById('boitier').addEventListener("click", function(){
+      document.getElementById('boitierCustom').style='display:flex;'
+      document.getElementById('fondCustom').style='display:none;'
+      document.getElementById('braceletCustom').style='display:none;'
+    })
 })
 
 </script>
@@ -334,6 +351,24 @@ onMounted(()=>{
         <p>ADD TO CART</p>
       </div>
     </div>
+
+  </div>    
+  <div class="aside">
+      <div class="aside__part" id="boitier">BOITIER</div>
+      <div class="aside__part" id="bracelet">BRACELET</div>
+      <div class="aside__part" id="fond">FOND</div>
+      <div class="aside__custom" id="braceletCustom">
+        <img src="/public/images/texture-cuir-blanc.jpg" alt="">
+        <img src="/public/images/texture-tissus-marron.jpg" alt="">
+      </div>
+      <div class="aside__custom" id="boitierCustom">
+        <div class="aside__img">ROND</div>
+        <div class="aside__img">CARRÉ</div>
+      </div>
+      <div class="aside__custom" id="fondCustom">
+        <div class="aside__img"><img src="/public/images/background_black01.png" alt=""></div>
+        <div class="aside__img"><img src="/public/images/background_black02.png" alt=""></div>
+      </div>
   </div>
 </template>
 
@@ -341,7 +376,8 @@ onMounted(()=>{
 .page {
   position: absolute;
   z-index: 0;
-  overflow: hidden;
+  overflow: hidden;    
+  color: $secondary-color;
 }
 
 .firstline{
@@ -351,12 +387,45 @@ onMounted(()=>{
   border-bottom: 1px solid $secondary-color;
   &__content {
     display: flex;
-    color: $secondary-color;
-    background-color: green;
     width: fit-content;
-    height: fit-content;
+    height: rem(20);
     padding: rem(10);
+    &:nth-child(3):hover {
+      background-color: $secondary-color;
+      color: $primary-color;
+    }
+  }
 }
+
+.aside {
+  position: absolute;
+  z-index: 0;
+  width: rem(220);
+  color: $secondary-color;
+  top: rem(40);
+  &__part {
+    border-bottom: 1px solid $secondary-color;
+    border-right: 1px solid $secondary-color;
+    padding: rem(10);
+    width: rem(200);
+    &:hover {
+      background-color: $secondary-color;
+      color: $primary-color;
+    }
+  }
+  &__custom {
+    display: none;
+    flex-direction: column;
+    img {
+      width: rem(200);
+      height: rem(100);      
+      object-fit: cover;
+      padding: rem(10) rem(10);
+      border-bottom: 1px solid $secondary-color;
+      border-right: 1px solid $secondary-color;
+    }
+  }
+
 }
 
 
