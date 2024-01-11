@@ -215,7 +215,7 @@ function generate() {
         scene.add(parent);
 
         // BOITIER -----
-
+        // CHANGEMENT DYNAMIQUE AVEC REF
         if(boitierChosen.value){
           console.log("boitier rond")       
           parent.add(boitier_rond);
@@ -230,16 +230,13 @@ function generate() {
           boitier_carre.visible=true
         }
 
+        const boitier_rondTextureUrl = "/images/"+fondChosen.value
+        boitier_rond.material[1].map = new THREE.TextureLoader().load(
+          boitier_rondTextureUrl
+        );
 
-
-
-
-        // console.log(aiguille_heures);
-        boitier_rond.material[1].map = backgroundBlack1;
-        // boitier_rond.material[1].map = backgroundBlack2;
 
         // AIGUILLES -----
-
         parent.add(aiguille_secondes);
         aiguille_secondes.position.set(0, 0, 3);
 
@@ -249,8 +246,8 @@ function generate() {
         parent.add(aiguille_heures);
         aiguille_heures.position.set(0, 0, 2.8);
 
-        // PIERRES -----
 
+        // PIERRES -----
         parent.add(pierre);
         pierre.position.set(0, 18.5, 4.5);
 
@@ -258,8 +255,8 @@ function generate() {
         parent.add(pierre2);
         pierre2.position.set(0, -18.5, 4.5);
 
-        // BOUTON -----
 
+        // BOUTON -----
         parent.add(bouton);
         bouton.position.set(-22, 0, 2.5);
 
@@ -268,7 +265,6 @@ function generate() {
           aiguille_minutes.material.emissive = new THREE.Color(1, 1, 1);
           aiguille_secondes.material.emissive = new THREE.Color(1, 1, 1);
 
-          // Rétablissez l'émissivité d'origine après 10 secondes
           setTimeout(function () {
             resetHandsEmissivity();
           }, 10000);
@@ -276,18 +272,20 @@ function generate() {
         bouton.updateAnimation = function (dt) {};
         animations.push(bouton);
 
-        // FERMOIR -----
 
+        // FERMOIR -----
         parent.add(fermoir);
         fermoir.position.set(0, 0, -26);
 
-        // BRACELET -----
 
+        // BRACELET -----
         parent.add(bracelet);
         bracelet.position.set(0, 0, 0);
-        // bracelet.material.map = textureCuirBlanc;
-          bracelet.material.map = textureTissusMarron;
-        //   bracelet.material.map = textureTissusOr;
+        // TEXTURE DYNAMIQUE
+        const braceletTextureUrl = "/images/"+braceletChosen.value
+        bracelet.material.map = new THREE.TextureLoader().load(
+          braceletTextureUrl
+        );
 
         parent.rotation.z = Math.PI;
 
@@ -328,8 +326,8 @@ function generate() {
 
 // REQUETES API
 
-const braceletChosen = ref()
-const fondChosen = ref()
+const braceletChosen = ref("texture-cuir-blanc.jpg")
+const fondChosen = ref("background_black01.png")
 const boitierChosen = ref(true)
 
 const bracelets = ref([])
@@ -395,14 +393,14 @@ onMounted(async ()=>{
       <div class="aside__part" id="bracelet">BRACELET</div>
       <div class="aside__part" id="fond">FOND</div>
       <div class="aside__custom" id="braceletCustom">
-        <img v-for="bracelet in bracelets.rows" :key="bracelet.bracelet_id" :src="`/images/${bracelet.url}`" alt="">
+        <img @click="braceletChosen=bracelet.url; generate()" v-for="bracelet in bracelets.rows" :key="bracelet.bracelet_id" :src="`/images/${bracelet.url}`" alt="">
       </div>
       <div class="aside__custom" id="boitierCustom">
         <div @click="boitierChosen=true; generate()" class="aside__choice" id="boitierRond">ROND</div>
         <div @click="boitierChosen=false; generate()" class="aside__choice" id="boitireCarre">CARRÉ</div>
       </div>
       <div class="aside__custom" id="fondCustom">
-        <img v-for="fond in fonds.rows" :key="fond.fond_id" :src="`/images/${fond.url}`" alt="">
+        <img @click="fondChosen=fond.url; generate();" v-for="fond in fonds.rows" :key="fond.fond_id" :src="`/images/${fond.url}`" alt="">
       </div>
   </div>
 </template>
