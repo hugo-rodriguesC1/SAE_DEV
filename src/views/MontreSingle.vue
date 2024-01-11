@@ -358,16 +358,16 @@ onMounted(()=>{
       <div class="aside__part" id="bracelet">BRACELET</div>
       <div class="aside__part" id="fond">FOND</div>
       <div class="aside__custom" id="braceletCustom">
-        <img src="/public/images/texture-cuir-blanc.jpg" alt="">
-        <img src="/public/images/texture-tissus-marron.jpg" alt="">
+        <img src="/images/texture-cuir-blanc.jpg" alt="">
+        <img src="/images/texture-tissus-marron.jpg" alt="">
       </div>
       <div class="aside__custom" id="boitierCustom">
-        <div class="aside__img">ROND</div>
-        <div class="aside__img">CARRÉ</div>
+        <div class="aside__choice">ROND</div>
+        <div class="aside__choice">CARRÉ</div>
       </div>
       <div class="aside__custom" id="fondCustom">
-        <div class="aside__img"><img src="/public/images/background_black01.png" alt=""></div>
-        <div class="aside__img"><img src="/public/images/background_black02.png" alt=""></div>
+        <div class="aside__img"><img src="/images/background_black01.png" alt=""></div>
+        <div class="aside__img"><img src="/images/background_black02.png" alt=""></div>
       </div>
   </div>
 </template>
@@ -425,8 +425,20 @@ onMounted(()=>{
       border-right: 1px solid $secondary-color;
     }
   }
-
+  &__choice {
+    padding: rem(10);
+    width: rem(100);
+    border-bottom: 1px solid $secondary-color;
+    border-right: 1px solid $secondary-color;
+    &:hover {
+      background-color: $third-color;
+    }
+  }
 }
+
+#boitierCustom {
+      flex-direction: row;
+    }
 
 
 
