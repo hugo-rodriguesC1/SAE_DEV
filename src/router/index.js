@@ -18,8 +18,8 @@ const router = createRouter({
       component: LoginVue
     },
     {
-      path: '/montre-list/:id',
-      name: 'montre-list-id',
+      path: '/montre-list/',
+      name: 'montre-list',
       component: MontreListVue
     },
     {
