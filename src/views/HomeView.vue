@@ -1,40 +1,97 @@
 <script setup>
-// import { ref, onMounted } from 'vue';
-// import * as THREE from 'three';
-// import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
-// import { ColladaLoader } from "three/examples/jsm/loaders/ColladaLoader.js";
-
-
-const target = ref();
-
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-
-const renderer = new THREE.WebGLRenderer();
-renderer.setSize(500, 500);
-
-const geometry = new THREE.BoxGeometry(1, 1, 1);
-const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-const cube = new THREE.Mesh(geometry, material);
-scene.add(cube);
-
-camera.position.z = 5;
-
-function animate() {
-  requestAnimationFrame(animate);
-
-  cube.rotation.x += 0.01;
-  cube.rotation.y += 0.01;
-
-  renderer.render(scene, camera);
-}
-
-onMounted(() => {
-  target.value.appendChild(renderer.domElement);
-  animate();
-});
 </script>
 
 <template>
-  <div ref="target"></div>
+  <div class="page">
+    <div class="firstline">
+      <div class="firstline__content">
+        <p><span></span>WATCH</p>
+      </div>
+      <div class="firstline__content">
+        <p>3D VIEWER</p>
+      </div>
+      <div class="firstline__content">
+        <RouterLink to="/login">LOGIN</RouterLink>
+      </div>
+    </div>
+    <div class="hero">
+      <div class="hero__left">
+        <div class="hero__title">START</div>
+        <div class="hero__title">CREATING</div>
+        <div class="hero__title">YOUR</div>
+        <div class="hero__title">WATCH</div>
+      </div>
+      <div class="hero__right">
+
+      </div>
+    </div>
+    <div class="credit">
+      <div class="credit__content">This site is for education purpose only / Developed and designed by <a href="hrodrigues.fr">Hugo Rodrigues</a></div>
+    </div>
+  </div>
 </template>
+
+<style lang="scss" scoped>
+
+.page {
+  background-color: $primary-color;
+  color: $secondary-color;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.firstline{
+  display: flex;
+  width: 100vw;
+  justify-content: space-between;
+  border-bottom: 1px solid $secondary-color;
+  &__content {
+    display: flex;
+    width: fit-content;
+    height: rem(20);
+    padding: rem(10);
+    &:nth-child(3) {
+      border-left: 1px solid $secondary-color;   
+      a {
+        color: $secondary-color; 
+      }
+      &:hover {
+        background-color: $secondary-color;
+        color: $primary-color;
+        a {
+          color: $primary-color; 
+        }
+      }
+    }
+
+  }
+}
+
+.hero {
+  display: flex;
+  &__left {
+    font-size: rem(160);
+    line-height: rem(145);
+    width: fit-content;
+    padding: rem(10);
+    border-right: 1px solid $secondary-color;
+  }
+}
+
+.credit {
+  padding: rem(15);
+  text-align: center;
+  font-size: rem(18);
+  border-top: 1px solid $secondary-color;
+
+  a {
+    color: $secondary-color;
+    &:hover{
+      background-color: $secondary-color;
+      color: $primary-color;
+    }
+  }
+}
+
+</style>
