@@ -1,8 +1,10 @@
 <script setup>
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { ColladaLoader } from "three/examples/jsm/loaders/ColladaLoader.js";
+
+import { client } from '@/utils/axios.js'
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(13,window.innerWidth / window.innerHeight, 1, 6000);
@@ -166,7 +168,6 @@ function animate() {
           clickInfo.userHasClicked = false; // pret pour le clique suivant
           raycaster.setFromCamera(clickInfo.mouse, camera);
           let intersections = raycaster.intersectObjects(scene.children, true);
-          console.log(intersections)
           let obj = null;
           if (intersections.length > 0) {
             obj = intersections[0].object; // l'objet de la premiere intersection
@@ -215,11 +216,23 @@ function generate() {
 
         // BOITIER -----
 
-        parent.add(boitier_rond);
-        boitier_rond.position.set(0, 0, 0);
+        if(boitierChosen.value){
+          console.log("boitier rond")       
+          parent.add(boitier_rond);
+          boitier_rond.position.set(0, 0, 0);
+          boitier_carre.visible=false
+          boitier_rond.visible=true
+        }else{
+          console.log("boitier carre")        
+          parent.add(boitier_carre)
+          boitier_carre.position.set(0,0,0)
+          boitier_rond.visible=false
+          boitier_carre.visible=true
+        }
 
-        //   parent.add(boitier_carre)
-        //   boitier_carre.position.set(0,0,0)
+
+
+
 
         // console.log(aiguille_heures);
         boitier_rond.material[1].map = backgroundBlack1;
@@ -313,12 +326,36 @@ function generate() {
       }
 
 
+// REQUETES API
 
-onMounted(()=>{    
+const braceletChosen = ref()
+const fondChosen = ref()
+const boitierChosen = ref(true)
+
+const bracelets = ref([])
+const fonds = ref([])
+
+const getBracelet = async () => {
+  const response = await client.get('/bracelet')
+  return response.data
+}
+const getFond = async () => {
+  const response = await client.get('/fond')
+  return response.data
+}
+
+
+
+onMounted(async ()=>{    
     start()
     animate()
 
+    bracelets.value = await getBracelet()
+    fonds.value = await getFond()
 
+
+
+    // MENU ASIDE
     document.getElementById('bracelet').addEventListener("click", function(){
       document.getElementById('braceletCustom').style='display:flex;'
       document.getElementById('fondCustom').style='display:none;'
@@ -358,16 +395,14 @@ onMounted(()=>{
       <div class="aside__part" id="bracelet">BRACELET</div>
       <div class="aside__part" id="fond">FOND</div>
       <div class="aside__custom" id="braceletCustom">
-        <img src="/images/texture-cuir-blanc.jpg" alt="">
-        <img src="/images/texture-tissus-marron.jpg" alt="">
+        <img v-for="bracelet in bracelets.rows" :key="bracelet.bracelet_id" :src="`/images/${bracelet.url}`" alt="">
       </div>
       <div class="aside__custom" id="boitierCustom">
-        <div class="aside__choice">ROND</div>
-        <div class="aside__choice">CARRÉ</div>
+        <div @click="boitierChosen=true; generate()" class="aside__choice" id="boitierRond">ROND</div>
+        <div @click="boitierChosen=false; generate()" class="aside__choice" id="boitireCarre">CARRÉ</div>
       </div>
       <div class="aside__custom" id="fondCustom">
-        <div class="aside__img"><img src="/images/background_black01.png" alt=""></div>
-        <div class="aside__img"><img src="/images/background_black02.png" alt=""></div>
+        <img v-for="fond in fonds.rows" :key="fond.fond_id" :src="`/images/${fond.url}`" alt="">
       </div>
   </div>
 </template>
@@ -390,10 +425,14 @@ onMounted(()=>{
     width: fit-content;
     height: rem(20);
     padding: rem(10);
-    &:nth-child(3):hover {
-      background-color: $secondary-color;
-      color: $primary-color;
+    &:nth-child(3) {
+      border-left: 1px solid $secondary-color;    
+      &:hover {
+        background-color: $secondary-color;
+        color: $primary-color;
     }
+    }
+
   }
 }
 
@@ -440,9 +479,13 @@ onMounted(()=>{
       flex-direction: row;
     }
 
-
-
-
+#fondCustom {
+  max-height: rem(300);
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
 
 
 </style>
