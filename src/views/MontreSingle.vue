@@ -6,6 +6,9 @@ import { ColladaLoader } from "three/examples/jsm/loaders/ColladaLoader.js";
 
 import { client } from '@/utils/axios.js'
 
+import { useRoute } from 'vue-router'
+
+
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(13,window.innerWidth / window.innerHeight, 1, 6000);
 const clock = new THREE.Clock();
@@ -324,7 +327,13 @@ function generate() {
       }
 
 
+// ROUTER
+const route = useRoute()
+const userId = ref(null);
+
+
 // REQUETES API
+const montre = ref()
 
 const braceletChosen = ref("texture-cuir-blanc.jpg")
 const fondChosen = ref("background_black01.png")
@@ -341,6 +350,10 @@ const getFond = async () => {
   const response = await client.get('/fond')
   return response.data
 }
+const getMontre = async (id) => {
+  const response = await client.get('/montre-single/' + id)
+  return response.data
+}
 
 
 
@@ -350,7 +363,11 @@ onMounted(async ()=>{
 
     bracelets.value = await getBracelet()
     fonds.value = await getFond()
+    montre.value = await getMontre(route.params.id)
 
+    // braceletChosen.value = montre.value.rows[0].braceletUrl
+    // console.log(montre.value)
+    // generate()
 
 
     // MENU ASIDE
