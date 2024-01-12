@@ -334,6 +334,7 @@ const userId = ref(null);
 
 // REQUETES API
 const montre = ref()
+const name = ref()
 
 const braceletChosen = ref("texture-cuir-blanc.jpg")
 const fondChosen = ref("background_black01.png")
@@ -358,10 +359,21 @@ const getMontre = async (id) => {
   return response.data
 }
 
+function redirect(err) {
+  if(err.response.data.error==="Token invalide"){
+    router.push('/login');
+  }
+}
 const Logout = () => {
   localStorage.removeItem('token');
   console.log('deco')
   router.push('/login');
+}
+const getName = async () => {
+  const response = await client.get('/username', { headers }).catch(
+    redirect
+  )
+  return response.data.rows[0].name
 }
 
 
@@ -377,6 +389,8 @@ onMounted(async ()=>{
     fondChosen.value = montre.value.rows[0].fondUrl
     boitierChosen.value = montre.value.rows[0].boitier
     generate()
+
+    name.value = await getName()
 
 
     // braceletChosen.value = montre.value.rows[0].braceletUrl
@@ -434,6 +448,10 @@ onMounted(async ()=>{
         <img @click="fondChosen=fond.url; generate();" v-for="fond in fonds.rows" :key="fond.fond_id" :src="`/images/${fond.url}`" alt="">
       </div>
   </div>
+  <div class="username">{{ name }}</div>
+  <RouterLink to="/cart" class="cart">CART</RouterLink>
+
+
 </template>
 
 <style lang="scss" scoped>
@@ -462,6 +480,31 @@ onMounted(async ()=>{
     }
     }
 
+  }
+}
+
+.username {
+  text-transform: uppercase;
+  position: absolute;
+  bottom: rem(10);
+  right: rem(10);
+  text-align: center;
+  color: $secondary-color;
+}
+
+.cart {
+  text-transform: uppercase;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  padding: rem(10);
+  text-align: center;
+  border-top: solid 1px $secondary-color;
+  border-right: solid 1px $secondary-color;
+  color: $secondary-color;
+  &:hover {
+    background-color: $secondary-color;
+    color: $primary-color;
   }
 }
 
