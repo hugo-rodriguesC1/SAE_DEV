@@ -359,9 +359,8 @@ const getFond = async () => {
   return response.data
 }
 const createMontre = async () => {
-  const response = await client.post('/create', {headers, boitier:boitierChosen.value, bracelet_id:braceletIdChosen.value, fond_id:fondIdChosen.value}).catch(
-    console.error("Erreur lors de la création montre:", err)
-  )
+  const response = await client.post('/create', {boitier:boitierChosen.value, bracelet_id:braceletIdChosen.value, fond_id:fondIdChosen.value}, {headers})
+  router.push('/montre-list/');
   return response.data
 }
 
@@ -442,7 +441,7 @@ onMounted(async ()=>{
         <div @click="boitierChosen=false; generate()" class="aside__choice" id="boitireCarre">CARRÉ</div>
       </div>
       <div class="aside__custom" id="fondCustom">
-        <img @click="fondChosen=fond.url; fondIdChosen=fond.fond_id; generate();" v-for="fond in fonds.rows" :key="fond.fond_id" :src="`/images/${fond.url}`" alt="">
+        <img @click="fondChosen=fond.url; fondIdChosen=fond.fond_id; console.log(fondIdChosen); generate();" v-for="fond in fonds.rows" :key="fond.fond_id" :src="`/images/${fond.url}`" alt="">
       </div>
   </div>
   <div class="menu">
