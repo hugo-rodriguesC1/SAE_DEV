@@ -6,7 +6,7 @@ import { ColladaLoader } from "three/examples/jsm/loaders/ColladaLoader.js";
 
 import { client } from '@/utils/axios.js'
 
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 
 const scene = new THREE.Scene();
@@ -337,10 +337,15 @@ const montre = ref()
 
 const braceletChosen = ref("texture-cuir-blanc.jpg")
 const fondChosen = ref("background_black01.png")
+const braceletIdChosen = ref()
+const fondIdChosen = ref()
 const boitierChosen = ref(true)
 
 const bracelets = ref([])
 const fonds = ref([])
+
+const token = localStorage.getItem('token');
+const headers = { Authorization: `Bearer ${token}` };
 
 const getBracelet = async () => {
   const response = await client.get('/bracelet')
@@ -350,8 +355,10 @@ const getFond = async () => {
   const response = await client.get('/fond')
   return response.data
 }
-const getMontre = async (id) => {
-  const response = await client.get('/montre-single/' + id)
+const createMontre = async () => {
+  const response = await client.post('/create', {headers, boitier:boitierChosen.value, bracelet_id:braceletIdChosen.value, fond_id:fondIdChosen.value}).catch(
+    console.error("Erreur lors de la création montre:", err)
+  )
   return response.data
 }
 
@@ -363,11 +370,8 @@ onMounted(async ()=>{
 
     bracelets.value = await getBracelet()
     fonds.value = await getFond()
-    montre.value = await getMontre(route.params.id)
 
-    // braceletChosen.value = montre.value.rows[0].braceletUrl
-    // console.log(montre.value)
-    // generate()
+
 
 
     // MENU ASIDE
@@ -410,14 +414,14 @@ onMounted(async ()=>{
       <div class="aside__part" id="bracelet">BRACELET</div>
       <div class="aside__part" id="fond">FOND</div>
       <div class="aside__custom" id="braceletCustom">
-        <img @click="braceletChosen=bracelet.url; generate()" v-for="bracelet in bracelets.rows" :key="bracelet.bracelet_id" :src="`/images/${bracelet.url}`" alt="">
+        <img @click="braceletChosen=bracelet.url; braceletIdChosen=bracelet.bracelet_id; generate()" v-for="bracelet in bracelets.rows" :key="bracelet.bracelet_id" :src="`/images/${bracelet.url}`" alt="">
       </div>
       <div class="aside__custom" id="boitierCustom">
         <div @click="boitierChosen=true; generate()" class="aside__choice" id="boitierRond">ROND</div>
         <div @click="boitierChosen=false; generate()" class="aside__choice" id="boitireCarre">CARRÉ</div>
       </div>
       <div class="aside__custom" id="fondCustom">
-        <img @click="fondChosen=fond.url; generate();" v-for="fond in fonds.rows" :key="fond.fond_id" :src="`/images/${fond.url}`" alt="">
+        <img @click="fondChosen=fond.url; fondIdChosen=fond.fond_id; generate();" v-for="fond in fonds.rows" :key="fond.fond_id" :src="`/images/${fond.url}`" alt="">
       </div>
   </div>
 </template>
