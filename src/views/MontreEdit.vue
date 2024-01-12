@@ -6,7 +6,7 @@ import { ColladaLoader } from "three/examples/jsm/loaders/ColladaLoader.js";
 
 import { client } from '@/utils/axios.js'
 
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 
 const scene = new THREE.Scene();
@@ -329,6 +329,7 @@ function generate() {
 
 // ROUTER
 const route = useRoute()
+const router = useRouter()
 const userId = ref(null);
 
 
