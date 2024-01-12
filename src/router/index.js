@@ -30,8 +30,8 @@ const router = createRouter({
       component: MontreListVue
     },
     {
-      path: '/montre-single/:id',
-      name: 'montre-single-id',
+      path: '/montre-single',
+      name: 'montre-single',
       component: MontreSingleVue
     },
     {
