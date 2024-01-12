@@ -22,10 +22,10 @@ const createAccount = async () => {
     });
 
     console.log(response.data); // Affiche la réponse de l'API
-    message.value = "Compte créé";
+    message.value = "ACOUNT CREATED";
   } catch (error) {
     console.error("Erreur lors de la création du compte:", error);
-    message.value = "Échec de la création";
+    message.value = "CREATION FAILED";
   }
 };
 
@@ -37,16 +37,16 @@ const loginAccount = async () => {
     });
 
     console.log(response.data); // Affiche la réponse de l'API
-    message.value = "CO OK";
+    message.value = "SUCCESSFUL CONNEXION";
     localStorage.setItem('token', response.data.token);
     setTimeout(() => {
       router.push({
-        name: "montre-list-id",
+        name: "montre-list",
       });
     }, 1500);
   } catch (error) {
     console.error("Erreur lors de la création du compte:", error);
-    message.value = "CO ECHEC";
+    message.value = "CONNECTION FAILED";
   }
 };
 
