@@ -158,7 +158,6 @@ onMounted(async () => {
   border-top: solid 1px $secondary-color;
   border-right: solid 1px $secondary-color;
   color: $secondary-color;
-
   &:hover {
     background-color: $secondary-color;
     color: $primary-color;

@@ -4,6 +4,7 @@ import LoginVue from '@/views/Login.vue'
 import CartVue from '@/views/Cart.vue'
 import MontreListVue from '@/views/MontreList.vue'
 import MontreSingleVue from '@/views/MontreSingle.vue'
+import MontreEditVue from '@/views/MontreEdit.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -32,6 +33,11 @@ const router = createRouter({
       path: '/montre-single/:id',
       name: 'montre-single-id',
       component: MontreSingleVue
+    },
+    {
+      path: '/montre-edit/:id',
+      name: 'montre-edit-id',
+      component: MontreEditVue
     },
 
   ]
