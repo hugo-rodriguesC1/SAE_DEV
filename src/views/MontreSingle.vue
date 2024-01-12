@@ -329,11 +329,14 @@ function generate() {
 
 // ROUTER
 const route = useRoute()
+const router = useRouter()
 const userId = ref(null);
 
 
 // REQUETES API
 const montre = ref()
+const name = ref()
+const montreId = ref()
 
 const braceletChosen = ref("texture-cuir-blanc.jpg")
 const fondChosen = ref("background_black01.png")
@@ -362,6 +365,23 @@ const createMontre = async () => {
   return response.data
 }
 
+function redirect(err) {
+  if(err.response.data.error==="Token invalide"){
+    router.push('/login');
+  }
+}
+const Logout = () => {
+  localStorage.removeItem('token');
+  console.log('deco')
+  router.push('/login');
+}
+const getName = async () => {
+  const response = await client.get('/username', { headers }).catch(
+    redirect
+  )
+  return response.data.rows[0].name
+}
+
 
 
 onMounted(async ()=>{    
@@ -371,7 +391,8 @@ onMounted(async ()=>{
     bracelets.value = await getBracelet()
     fonds.value = await getFond()
 
-
+    name.value = await getName()
+    montreId.value = route.params.id
 
 
     // MENU ASIDE
@@ -404,7 +425,7 @@ onMounted(async ()=>{
         <p>3D VIEWER</p>
       </div>
       <div class="firstline__content">
-        <p>ADD TO CART</p>
+        <div @click="Logout">LOGOUT</div>
       </div>
     </div>
 
@@ -424,6 +445,12 @@ onMounted(async ()=>{
         <img @click="fondChosen=fond.url; fondIdChosen=fond.fond_id; generate();" v-for="fond in fonds.rows" :key="fond.fond_id" :src="`/images/${fond.url}`" alt="">
       </div>
   </div>
+  <div class="menu">
+    <div class="menu__part" id="boitier">ADD TO CART</div>
+    <div class="menu__part" id="bracelet" @click="createMontre">SAVE</div>
+  </div>
+  <div class="username">{{ montreId }} - {{ name }}</div>
+  <RouterLink to="/cart" class="cart">CART</RouterLink>
 </template>
 
 <style lang="scss" scoped>
@@ -433,6 +460,8 @@ onMounted(async ()=>{
   overflow: hidden;    
   color: $secondary-color;
 }
+
+
 
 .firstline{
   display: flex;
@@ -452,6 +481,31 @@ onMounted(async ()=>{
     }
     }
 
+  }
+}
+
+.username {
+  text-transform: uppercase;
+  position: absolute;
+  bottom: rem(10);
+  right: rem(10);
+  text-align: center;
+  color: $secondary-color;
+}
+
+.cart {
+  text-transform: uppercase;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  padding: rem(10);
+  text-align: center;
+  border-top: solid 1px $secondary-color;
+  border-right: solid 1px $secondary-color;
+  color: $secondary-color;
+  &:hover {
+    background-color: $secondary-color;
+    color: $primary-color;
   }
 }
 
@@ -504,6 +558,24 @@ onMounted(async ()=>{
   &::-webkit-scrollbar {
     display: none;
   }
+}
+
+.menu {
+    position: absolute;
+    z-index: 0;
+    top: rem(40);
+    right: 0;
+    color: $secondary-color;
+    &__part {
+        border-bottom: 1px solid $secondary-color;
+        border-left: 1px solid $secondary-color;
+        padding: rem(10);
+        padding-right: rem(80);
+        &:hover {
+            background-color: $secondary-color;
+            color: $primary-color;
+            }
+    }
 }
 
 
