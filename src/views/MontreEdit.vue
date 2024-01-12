@@ -335,6 +335,7 @@ const userId = ref(null);
 // REQUETES API
 const montre = ref()
 const name = ref()
+const montreId = ref()
 
 const braceletChosen = ref("texture-cuir-blanc.jpg")
 const fondChosen = ref("background_black01.png")
@@ -391,6 +392,7 @@ onMounted(async ()=>{
     generate()
 
     name.value = await getName()
+    montreId.value = route.params.id
 
 
     // braceletChosen.value = montre.value.rows[0].braceletUrl
@@ -448,7 +450,11 @@ onMounted(async ()=>{
         <img @click="fondChosen=fond.url; generate();" v-for="fond in fonds.rows" :key="fond.fond_id" :src="`/images/${fond.url}`" alt="">
       </div>
   </div>
-  <div class="username">{{ name }}</div>
+  <div class="menu">
+    <div class="menu__part" id="boitier">ADD TO CART</div>
+    <div class="menu__part" id="bracelet">SAVE</div>
+  </div>
+  <div class="username">{{ montreId }} - {{ name }}</div>
   <RouterLink to="/cart" class="cart">CART</RouterLink>
 
 
@@ -461,6 +467,8 @@ onMounted(async ()=>{
   overflow: hidden;    
   color: $secondary-color;
 }
+
+
 
 .firstline{
   display: flex;
@@ -557,6 +565,24 @@ onMounted(async ()=>{
   &::-webkit-scrollbar {
     display: none;
   }
+}
+
+.menu {
+    position: absolute;
+    z-index: 0;
+    top: rem(40);
+    right: 0;
+    color: $secondary-color;
+    &__part {
+        border-bottom: 1px solid $secondary-color;
+        border-left: 1px solid $secondary-color;
+        padding: rem(10);
+        padding-right: rem(80);
+        &:hover {
+            background-color: $secondary-color;
+            color: $primary-color;
+            }
+    }
 }
 
 
