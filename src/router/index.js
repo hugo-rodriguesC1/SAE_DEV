@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import LoginVue from '@/views/Login.vue'
+import CartVue from '@/views/Cart.vue'
 import MontreListVue from '@/views/MontreList.vue'
 import MontreSingleVue from '@/views/MontreSingle.vue'
 
@@ -16,6 +17,11 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       component: LoginVue
+    },
+    {
+      path: '/cart',
+      name: 'cart',
+      component: CartVue
     },
     {
       path: '/montre-list/',
