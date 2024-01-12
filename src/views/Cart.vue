@@ -27,7 +27,7 @@ const getName = async () => {
   return response.data.rows[0].name
 }
 const getMontres = async () => {
-  const response = await client.get('/montre-list', { headers }).catch(
+  const response = await client.get('/cart', { headers }).catch(
     redirect
   )
   return response.data.rows
@@ -60,7 +60,7 @@ onMounted(async () => {
     </div>
     <div class="collection">
       <div class="collection__title">
-        COLLECTION
+        CART
       </div>
       <div class="collection__container">
         <div class="collection__card" v-for="montre in montres" :key="montre.montre_id">
@@ -72,7 +72,6 @@ onMounted(async () => {
       </div>
     </div>
     <div class="username">{{ name }}</div>
-    <RouterLink to="/cart" class="cart">CART</RouterLink>
 </div>
 </template>
 
@@ -147,21 +146,6 @@ onMounted(async () => {
   bottom: rem(10);
   right: rem(10);
   text-align: center;
-}
-.cart {
-  text-transform: uppercase;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  padding: rem(10);
-  text-align: center;
-  border-top: solid 1px $secondary-color;
-  border-right: solid 1px $secondary-color;
-  color: $secondary-color;
-  &:hover {
-    background-color: $secondary-color;
-    color: $primary-color;
-  }
 }
 
 </style>

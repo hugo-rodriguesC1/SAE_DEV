@@ -8,108 +8,131 @@ const router = useRouter();
 const name = ref("");
 const password = ref("");
 
-const loginName = ref('');
-const loginPassword = ref('');
+const loginName = ref("");
+const loginPassword = ref("");
+
+const user = ref();
+const message = ref();
 
 const createAccount = async () => {
   try {
-    const response = await axios.post("http://localhost:3000/users", {
+    const response = await axios.post("http://localhost:3000/register", {
       name: name.value,
       password: password.value,
     });
 
     console.log(response.data); // Affiche la réponse de l'API
+    message.value = "ACOUNT CREATED";
   } catch (error) {
     console.error("Erreur lors de la création du compte:", error);
+    message.value = "CREATION FAILED";
   }
 };
 
-const Login = () => {
-  const user = users.value.users.find(
-    (u) => u.name === loginName.value && u.password === loginPassword.value
-  );
+const loginAccount = async () => {
+  try {
+    const response = await axios.post("http://localhost:3000/login", {
+      name: loginName.value,
+      password: loginPassword.value,
+    });
 
-  if (user) {
-    console.log("Connexion réussie");
-    router.push({ name: 'montre-list-id', params: { id: user.user_id } });
-  } else {
-    console.log("Échec de la connexion");
+    console.log(response.data); // Affiche la réponse de l'API
+    message.value = "SUCCESSFUL CONNEXION";
+    localStorage.setItem('token', response.data.token);
+    setTimeout(() => {
+      router.push({
+        name: "montre-list",
+      });
+    }, 1500);
+  } catch (error) {
+    console.error("Erreur lors de la création du compte:", error);
+    message.value = "CONNECTION FAILED";
   }
-};
-
-const users = ref({});
-
-const getUsers = async () => {
-  const response = await axios.get("http://localhost:3000/users");
-  return response.data;
 };
 
 onMounted(async () => {
-  users.value = await getUsers();
-  console.log(users);
 });
 </script>
 
 <template>
   <div class="page">
-      <form @submit.prevent="createAccount" class="form">
-        <div class="form__line">
-            <label for="name">Nom d'utilisateur</label>
-            <input v-model="name" type="text" id="name" required />
-        </div>
-        <div class="form__line">
-            <label for="password">Mot de passe</label>
-            <input v-model="password" type="password" id="password" required />
-        </div>
-        <button class="form__button" type="submit">Créer un compte</button>
-      </form>
-      <form @submit.prevent="Login" class="form">
-          <div class="form__line">
-              <label for="loginName">Nom d'utilisateur</label>
-              <input v-model="loginName" type="text" id="loginName" required />
-          </div>
-          <div class="form__line">
-              <label for="loginPassword">Mot de passe</label>
-              <input v-model="loginPassword" type="password" id="loginPassword" required />
-          </div>
-          <button class="form__button" type="submit">Connexion</button>
-        </form>
+    <div class="hero">REGISTER OR LOGIN TO ACCESS 3D VIEWER</div>
+    <form @submit.prevent="createAccount" class="form">
+      <label for="name">USERNAME</label>
+      <input v-model="name" type="text" id="name" required />
+      <label for="password">PASSWORD</label>
+      <input v-model="password" type="password" id="password" required />
+      <button class="form__button" type="submit">REGISTER</button>
+    </form>
+    <form @submit.prevent="loginAccount" class="form">
+      <label for="loginName">USERNAME</label>
+      <input v-model="loginName" type="text" id="loginName" required />
+      <label for="loginPassword">PASSWORD</label>
+      <input
+        v-model="loginPassword"
+        type="password"
+        id="loginPassword"
+        required
+      />
+      <button class="form__button" type="submit">LOGIN</button>
+    </form>
+    <div class="result">
+      <div class="result__title">CONSOLE</div>
+      <div class="result__content">{{ message }}</div>
+    </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
 .page {
-    background-color: $primary-color;
-    color: $secondary-color;
-    display: flex;
-    justify-content: center;
-    gap: rem(150);
-    height: 100vh;
+  background-color: $primary-color;
+  color: $secondary-color;
+  width: 100vw;
+  height: 100vh;
 }
 
-.form{
-    display: flex;
-    flex-direction: column;
-    margin-top: rem(250);
-    &__line {
-        display: flex;
-        gap: rem(10);
-        justify-content: space-between;
-        margin-bottom: rem(15);
-        font-size: medium;
-        input {
-            background-color: transparent;
-            color: $secondary-color;
-            border: 1px solid $secondary-color;
-            border-radius: rem(15);
-            padding: rem(5) rem(3);
-        }
-    }
-    &__button {
-        background-color: $secondary-color;
-        border-radius: rem(15);
-        padding: rem(10) 0;
-        font-size: rem(15);
-    }
+.hero {
+  font-size: rem(60);
+  padding: rem(10);
+  border-bottom: 1px solid $secondary-color;
+}
+
+.form {
+  display: flex;
+  align-items: center;
+  font-size: rem(40);
+  border-bottom: 1px solid $secondary-color;
+  width: 100vw;
+  > label {
+    padding: rem(10);
+    border-right: 1px solid $secondary-color;
+    width: 20vw;
+  }
+  input {
+    width: 20vw;
+    height: rem(63);
+    font-size: rem(40);
+  }
+  button {
+    width: 20vw;
+    height: rem(68);
+    font-size: rem(40);
+  }
+}
+
+.result {
+  display: flex;
+  width: 100vw;
+  border-bottom: 1px solid $secondary-color;
+  font-size: rem(40);
+  color: $third-color;
+  &__title {
+    padding: rem(10);
+    border-right: 1px solid $secondary-color;
+  }
+  &__content {
+    padding: rem(10);
+    text-transform: uppercase;
+  }
 }
 </style>
