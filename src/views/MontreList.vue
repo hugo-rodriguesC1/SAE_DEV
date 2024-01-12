@@ -12,6 +12,7 @@ const headers = { Authorization: `Bearer ${token}` };
 
 const name = ref()
 const montres = ref()
+const boitier = ref()
 
 function redirect(err) {
   if(err.response.data.error==="Token invalide"){
@@ -57,9 +58,20 @@ onMounted(async () => {
         <div @click="Logout">LOGOUT</div>
       </div>
     </div>
-    <div>
-      MONTRES : {{ montres }}
+    <div class="collection">
+      <div class="collection__title">
+        COLLECTION
+      </div>
+      <div class="collection__container">
+        <div class="collection__card" v-for="montre in montres" :key="montre.montre_id">
+          <div class="collection__content"># <span>{{ montre.montre_id }}</span></div>
+          <div class="collection__content">BOITIER : <span>{{ montre.boitier ? 'ROND' : 'CARRÉ' }}</span></div>
+          <div class="collection__content">BRACELET : <span>{{ montre.braceletName }}</span></div>
+          <div class="collection__button">MODIFY</div>
+        </div>
+      </div>
     </div>
+    <div class="username">{{ name }}</div>
 </div>
 </template>
 
@@ -84,7 +96,9 @@ onMounted(async () => {
     height: rem(20);
     padding: rem(10);
     &:nth-child(3) {
-      border-left: 1px solid $secondary-color;   
+      border-left: 1px solid $secondary-color;  
+      display: flex; 
+      gap: rem(20);
       a {
         color: $secondary-color; 
       }
@@ -97,6 +111,41 @@ onMounted(async () => {
       }
     }
   }
+}
+
+.collection {
+  padding: rem(10);
+  &__container {
+    margin-top: rem(10);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: rem(10);
+  }
+  &__card {
+    border: solid 1px $secondary-color;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    padding: rem(10);
+  }
+  &__button {
+    padding: rem(10);
+    margin-top: rem(20);
+    background-color: $third-color;
+    align-self: flex-end;
+    &:hover {
+      background-color: $secondary-color;
+      color: $primary-color;
+    }
+  }
+}
+
+.username {
+  text-transform: uppercase;
+  position: absolute;
+  bottom: rem(10);
+  right: rem(10);
+  text-align: center;
 }
 
 </style>
