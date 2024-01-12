@@ -358,6 +358,12 @@ const getMontre = async (id) => {
   return response.data
 }
 
+const Logout = () => {
+  localStorage.removeItem('token');
+  console.log('deco')
+  router.push('/login');
+}
+
 
 
 onMounted(async ()=>{    
@@ -367,7 +373,6 @@ onMounted(async ()=>{
     bracelets.value = await getBracelet()
     fonds.value = await getFond()
     montre.value = await getMontre(route.params.id)
-    console.log(montre.value.rows[0])
     braceletChosen.value = montre.value.rows[0].braceletUrl
     fondChosen.value = montre.value.rows[0].fondUrl
     boitierChosen.value = montre.value.rows[0].boitier
@@ -409,7 +414,7 @@ onMounted(async ()=>{
         <p>3D VIEWER</p>
       </div>
       <div class="firstline__content">
-        <p>ADD TO CART</p>
+        <div @click="Logout">LOGOUT</div>
       </div>
     </div>
 
