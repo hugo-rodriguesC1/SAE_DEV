@@ -6,7 +6,7 @@ import { ColladaLoader } from "three/examples/jsm/loaders/ColladaLoader.js";
 
 import { client } from '@/utils/axios.js'
 
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 
 const scene = new THREE.Scene();
@@ -329,18 +329,26 @@ function generate() {
 
 // ROUTER
 const route = useRoute()
+const router = useRouter()
 const userId = ref(null);
 
 
 // REQUETES API
 const montre = ref()
+const name = ref()
+const montreId = ref()
 
 const braceletChosen = ref("texture-cuir-blanc.jpg")
 const fondChosen = ref("background_black01.png")
+const braceletIdChosen = ref()
+const fondIdChosen = ref()
 const boitierChosen = ref(true)
 
 const bracelets = ref([])
 const fonds = ref([])
+
+const token = localStorage.getItem('token');
+const headers = { Authorization: `Bearer ${token}` };
 
 const getBracelet = async () => {
   const response = await client.get('/bracelet')
@@ -350,9 +358,27 @@ const getFond = async () => {
   const response = await client.get('/fond')
   return response.data
 }
-const getMontre = async (id) => {
-  const response = await client.get('/montre-single/' + id)
+const createMontre = async () => {
+  const response = await client.post('/create', {boitier:boitierChosen.value, bracelet_id:braceletIdChosen.value, fond_id:fondIdChosen.value}, {headers})
+  router.push('/montre-list/');
   return response.data
+}
+
+function redirect(err) {
+  if(err.response.data.error==="Token invalide"){
+    router.push('/login');
+  }
+}
+const Logout = () => {
+  localStorage.removeItem('token');
+  console.log('deco')
+  router.push('/login');
+}
+const getName = async () => {
+  const response = await client.get('/username', { headers }).catch(
+    redirect
+  )
+  return response.data.rows[0].name
 }
 
 
@@ -363,11 +389,9 @@ onMounted(async ()=>{
 
     bracelets.value = await getBracelet()
     fonds.value = await getFond()
-    montre.value = await getMontre(route.params.id)
 
-    // braceletChosen.value = montre.value.rows[0].braceletUrl
-    // console.log(montre.value)
-    // generate()
+    name.value = await getName()
+    montreId.value = route.params.id
 
 
     // MENU ASIDE
@@ -400,7 +424,7 @@ onMounted(async ()=>{
         <p>3D VIEWER</p>
       </div>
       <div class="firstline__content">
-        <p>ADD TO CART</p>
+        <div @click="Logout">LOGOUT</div>
       </div>
     </div>
 
@@ -410,16 +434,22 @@ onMounted(async ()=>{
       <div class="aside__part" id="bracelet">BRACELET</div>
       <div class="aside__part" id="fond">FOND</div>
       <div class="aside__custom" id="braceletCustom">
-        <img @click="braceletChosen=bracelet.url; generate()" v-for="bracelet in bracelets.rows" :key="bracelet.bracelet_id" :src="`/images/${bracelet.url}`" alt="">
+        <img @click="braceletChosen=bracelet.url; braceletIdChosen=bracelet.bracelet_id; generate()" v-for="bracelet in bracelets.rows" :key="bracelet.bracelet_id" :src="`/images/${bracelet.url}`" alt="">
       </div>
       <div class="aside__custom" id="boitierCustom">
         <div @click="boitierChosen=true; generate()" class="aside__choice" id="boitierRond">ROND</div>
         <div @click="boitierChosen=false; generate()" class="aside__choice" id="boitireCarre">CARRÉ</div>
       </div>
       <div class="aside__custom" id="fondCustom">
-        <img @click="fondChosen=fond.url; generate();" v-for="fond in fonds.rows" :key="fond.fond_id" :src="`/images/${fond.url}`" alt="">
+        <img @click="fondChosen=fond.url; fondIdChosen=fond.fond_id; console.log(fondIdChosen); generate();" v-for="fond in fonds.rows" :key="fond.fond_id" :src="`/images/${fond.url}`" alt="">
       </div>
   </div>
+  <div class="menu">
+    <div class="menu__part">ADD TO CART</div>
+    <div class="menu__part" @click="createMontre">SAVE</div>
+  </div>
+  <div class="username" @click="router.push('/montre-list')">{{ name }}</div>
+  <RouterLink to="/cart" class="cart">CART</RouterLink>
 </template>
 
 <style lang="scss" scoped>
@@ -429,6 +459,8 @@ onMounted(async ()=>{
   overflow: hidden;    
   color: $secondary-color;
 }
+
+
 
 .firstline{
   display: flex;
@@ -448,6 +480,38 @@ onMounted(async ()=>{
     }
     }
 
+  }
+}
+
+.username {
+  text-transform: uppercase;
+  position: absolute;
+  bottom: rem(0);
+  left: rem(0);
+  padding: rem(10);
+  text-align: center;
+  color: $secondary-color;
+  border-top: solid 1px $secondary-color;
+  border-right: solid 1px $secondary-color;
+  &:hover {
+    background-color: $secondary-color;
+    color: $primary-color;
+  }
+}
+
+.cart {
+  text-transform: uppercase;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding: rem(10);
+  text-align: center;
+  border-top: solid 1px $secondary-color;
+  border-left: solid 1px $secondary-color;
+  color: $secondary-color;
+  &:hover {
+    background-color: $secondary-color;
+    color: $primary-color;
   }
 }
 
@@ -500,6 +564,24 @@ onMounted(async ()=>{
   &::-webkit-scrollbar {
     display: none;
   }
+}
+
+.menu {
+    position: absolute;
+    z-index: 0;
+    top: rem(40);
+    right: 0;
+    color: $secondary-color;
+    &__part {
+        border-bottom: 1px solid $secondary-color;
+        border-left: 1px solid $secondary-color;
+        padding: rem(10);
+        padding-right: rem(80);
+        &:hover {
+            background-color: $secondary-color;
+            color: $primary-color;
+            }
+    }
 }
 
 
