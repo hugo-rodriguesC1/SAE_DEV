@@ -344,6 +344,8 @@ const montreId = ref()
 
 const braceletChosen = ref("texture-cuir-blanc.jpg")
 const fondChosen = ref("background_black01.png")
+const braceletIdChosen = ref()
+const fondIdChosen = ref()
 const boitierChosen = ref(true)
 
 const bracelets = ref([])
@@ -381,7 +383,13 @@ const getName = async () => {
   return response.data.rows[0].name
 }
 
-const reload = ref(false)
+const updateMontre = async () => {
+  const response = await client.post('/update', {boitier:boitierChosen.value, bracelet_id:braceletIdChosen.value, fond_id:fondIdChosen.value}, {headers})
+  router.push('/montre-list/');
+  return response.data
+}
+
+
 
 onMounted(async ()=>{        
     start()
@@ -444,19 +452,19 @@ onUnmounted(()=>{
       <div class="aside__part" id="bracelet">BRACELET</div>
       <div class="aside__part" id="fond">FOND</div>
       <div class="aside__custom" id="braceletCustom">
-        <img @click="braceletChosen=bracelet.url; generate()" v-for="bracelet in bracelets.rows" :key="bracelet.bracelet_id" :src="`/images/${bracelet.url}`" alt="">
+        <img @click="braceletChosen=bracelet.url; braceletIdChosen=bracelet.bracelet_id; generate()" v-for="bracelet in bracelets.rows" :key="bracelet.bracelet_id" :src="`/images/${bracelet.url}`" alt="">
       </div>
       <div class="aside__custom" id="boitierCustom">
         <div @click="boitierChosen=true; generate()" class="aside__choice" id="boitierRond">ROND</div>
         <div @click="boitierChosen=false; generate()" class="aside__choice" id="boitireCarre">CARRÉ</div>
       </div>
       <div class="aside__custom" id="fondCustom">
-        <img @click="fondChosen=fond.url; generate();" v-for="fond in fonds.rows" :key="fond.fond_id" :src="`/images/${fond.url}`" alt="">
+        <img @click="fondChosen=fond.url; fondIdChosen=fond.fond_id; generate();" v-for="fond in fonds.rows" :key="fond.fond_id" :src="`/images/${fond.url}`" alt="">
       </div>
   </div>
   <div class="menu">
-    <div class="menu__part" id="boitier">ADD TO CART</div>
-    <div class="menu__part" id="bracelet">SAVE</div>
+    <div class="menu__part">ADD TO CART</div>
+    <div class="menu__part" @click="updateMontre">SAVE</div>
   </div>
   <div class="username" @click="router.push('/montre-list')">{{ montreId }} - {{ name }}</div>
   <RouterLink to="/cart" class="cart">CART</RouterLink>
