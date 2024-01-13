@@ -445,8 +445,8 @@ onMounted(async ()=>{
       </div>
   </div>
   <div class="menu">
-    <div class="menu__part" id="boitier">ADD TO CART</div>
-    <div class="menu__part" id="bracelet" @click="createMontre">SAVE</div>
+    <div class="menu__part">ADD TO CART</div>
+    <div class="menu__part" @click="createMontre">SAVE</div>
   </div>
   <div class="username">{{ montreId }} - {{ name }}</div>
   <RouterLink to="/cart" class="cart">CART</RouterLink>

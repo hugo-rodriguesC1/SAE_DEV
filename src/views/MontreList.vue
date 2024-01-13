@@ -42,6 +42,7 @@ const Logout = () => {
 onMounted(async () => {
   name.value = await getName()
   montres.value = await getMontres()
+  console.log(montres.value)
 });
 </script>
 
@@ -63,6 +64,9 @@ onMounted(async () => {
         COLLECTION
       </div>
       <div class="collection__container">
+        <div class="collection__card">
+          <div class="collection__content" @click="router.push('/montre-single')">NEW WATCH</div>
+        </div>
         <div class="collection__card" v-for="montre in montres" :key="montre.montre_id">
           <div class="collection__content"># <span>{{ montre.montre_id }}</span></div>
           <div class="collection__content">BOITIER : <span>{{ montre.boitier ? 'ROND' : 'CARRÉ' }}</span></div>

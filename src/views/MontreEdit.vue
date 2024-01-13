@@ -387,6 +387,7 @@ onMounted(async ()=>{
     bracelets.value = await getBracelet()
     fonds.value = await getFond()
     montre.value = await getMontre(route.params.id)
+    console.log(montre.value)
     braceletChosen.value = montre.value.rows[0].braceletUrl
     fondChosen.value = montre.value.rows[0].fondUrl
     boitierChosen.value = montre.value.rows[0].boitier
