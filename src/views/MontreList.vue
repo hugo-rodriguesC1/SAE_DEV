@@ -68,8 +68,8 @@ onUnmounted(()=>{
         COLLECTION
       </div>
       <div class="collection__container">
-        <div class="collection__card">
-          <div class="collection__content" @click="router.push('/montre-single')">NEW WATCH</div>
+        <div class="collection__card" @click="router.push('/montre-single')">
+          <div class="collection__content">NEW WATCH</div>
         </div>
         <div class="collection__card" v-for="montre in montres" :key="montre.montre_id" @click="router.push('/montre-edit/' + montre.montre_id)">
           <div class="collection__content"># <span>{{ montre.montre_id }}</span></div>
