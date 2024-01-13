@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router'
 import axios from "axios";
 import { client } from '@/utils/axios.js'
@@ -44,6 +44,10 @@ onMounted(async () => {
   montres.value = await getMontres()
   console.log(montres.value)
 });
+
+onUnmounted(()=>{
+  router.go()
+})
 </script>
 
 <template>
@@ -67,7 +71,7 @@ onMounted(async () => {
         <div class="collection__card">
           <div class="collection__content" @click="router.push('/montre-single')">NEW WATCH</div>
         </div>
-        <div class="collection__card" v-for="montre in montres" :key="montre.montre_id">
+        <div class="collection__card" v-for="montre in montres" :key="montre.montre_id" @click="router.push('/montre-edit/' + montre.montre_id)">
           <div class="collection__content"># <span>{{ montre.montre_id }}</span></div>
           <div class="collection__content">BOITIER : <span>{{ montre.boitier ? 'ROND' : 'CARRÉ' }}</span></div>
           <div class="collection__content">BRACELET : <span>{{ montre.braceletName }}</span></div>
@@ -148,19 +152,24 @@ onMounted(async () => {
 .username {
   text-transform: uppercase;
   position: absolute;
-  bottom: rem(10);
-  right: rem(10);
+  bottom: rem(0);
+  left: rem(0);
+  padding: rem(10);
   text-align: center;
+  color: $secondary-color;
+  border-top: solid 1px $secondary-color;
+  border-right: solid 1px $secondary-color;
 }
+
 .cart {
   text-transform: uppercase;
   position: absolute;
   bottom: 0;
-  left: 0;
+  right: 0;
   padding: rem(10);
   text-align: center;
   border-top: solid 1px $secondary-color;
-  border-right: solid 1px $secondary-color;
+  border-left: solid 1px $secondary-color;
   color: $secondary-color;
   &:hover {
     background-color: $secondary-color;

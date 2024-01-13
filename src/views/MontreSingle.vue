@@ -486,21 +486,28 @@ onMounted(async ()=>{
 .username {
   text-transform: uppercase;
   position: absolute;
-  bottom: rem(10);
-  right: rem(10);
+  bottom: rem(0);
+  left: rem(0);
+  padding: rem(10);
   text-align: center;
   color: $secondary-color;
+  border-top: solid 1px $secondary-color;
+  border-right: solid 1px $secondary-color;
+  &:hover {
+    background-color: $secondary-color;
+    color: $primary-color;
+  }
 }
 
 .cart {
   text-transform: uppercase;
   position: absolute;
   bottom: 0;
-  left: 0;
+  right: 0;
   padding: rem(10);
   text-align: center;
   border-top: solid 1px $secondary-color;
-  border-right: solid 1px $secondary-color;
+  border-left: solid 1px $secondary-color;
   color: $secondary-color;
   &:hover {
     background-color: $secondary-color;

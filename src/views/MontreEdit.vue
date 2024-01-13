@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, getCurrentInstance, onUpdated, onUnmounted } from "vue";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { ColladaLoader } from "three/examples/jsm/loaders/ColladaLoader.js";
@@ -40,6 +40,8 @@ var textureTissusOr;
 
 var backgroundBlack1;
 var backgroundBlack2;
+
+var parent
 
 //CLIC
 function onClickEvent(event) {
@@ -212,21 +214,23 @@ function generate() {
           scene.remove(old);
         }
 
+        var test = route.params.id
+        console.log('TEST ID : ', test)
+
         // PARENT -----
 
         parent = new THREE.Mesh();
+        parent.routeID = route.params.id
         scene.add(parent);
 
         // BOITIER -----
         // CHANGEMENT DYNAMIQUE AVEC REF
         if(boitierChosen.value){
-          console.log("boitier rond")       
           parent.add(boitier_rond);
           boitier_rond.position.set(0, 0, 0);
           boitier_carre.visible=false
           boitier_rond.visible=true
         }else{
-          console.log("boitier carre")        
           parent.add(boitier_carre)
           boitier_carre.position.set(0,0,0)
           boitier_rond.visible=false
@@ -297,7 +301,7 @@ function generate() {
         //   document.getElementById("textB4").value = brique4.copies;
         //   document.getElementById("textB6").value = brique6.copies;
 
-        console.log(scene)
+        console.log("SCENE : ",scene)
       }
 
       function getSystemTime() {
@@ -368,7 +372,6 @@ function redirect(err) {
 }
 const Logout = () => {
   localStorage.removeItem('token');
-  console.log('deco')
   router.push('/login');
 }
 const getName = async () => {
@@ -378,28 +381,25 @@ const getName = async () => {
   return response.data.rows[0].name
 }
 
+const reload = ref(false)
 
-
-onMounted(async ()=>{    
+onMounted(async ()=>{        
     start()
     animate()
-
     bracelets.value = await getBracelet()
     fonds.value = await getFond()
     montre.value = await getMontre(route.params.id)
-    console.log(montre.value)
+    console.log("MONTRE : ",montre.value)
     braceletChosen.value = montre.value.rows[0].braceletUrl
     fondChosen.value = montre.value.rows[0].fondUrl
     boitierChosen.value = montre.value.rows[0].boitier
-    generate()
-
     name.value = await getName()
     montreId.value = route.params.id
 
+    generate()
 
-    // braceletChosen.value = montre.value.rows[0].braceletUrl
-    // console.log(montre.value)
-    // generate()
+
+
 
 
     // MENU ASIDE
@@ -420,6 +420,8 @@ onMounted(async ()=>{
     })
 })
 
+onUnmounted(()=>{
+})
 </script>
 
 <template>
@@ -456,7 +458,7 @@ onMounted(async ()=>{
     <div class="menu__part" id="boitier">ADD TO CART</div>
     <div class="menu__part" id="bracelet">SAVE</div>
   </div>
-  <div class="username">{{ montreId }} - {{ name }}</div>
+  <div class="username" @click="router.push('/montre-list')">{{ montreId }} - {{ name }}</div>
   <RouterLink to="/cart" class="cart">CART</RouterLink>
 
 
@@ -496,21 +498,28 @@ onMounted(async ()=>{
 .username {
   text-transform: uppercase;
   position: absolute;
-  bottom: rem(10);
-  right: rem(10);
+  bottom: rem(0);
+  left: rem(0);
+  padding: rem(10);
   text-align: center;
   color: $secondary-color;
+  border-top: solid 1px $secondary-color;
+  border-right: solid 1px $secondary-color;
+  &:hover {
+    background-color: $secondary-color;
+    color: $primary-color;
+  }
 }
 
 .cart {
   text-transform: uppercase;
   position: absolute;
   bottom: 0;
-  left: 0;
+  right: 0;
   padding: rem(10);
   text-align: center;
   border-top: solid 1px $secondary-color;
-  border-right: solid 1px $secondary-color;
+  border-left: solid 1px $secondary-color;
   color: $secondary-color;
   &:hover {
     background-color: $secondary-color;
