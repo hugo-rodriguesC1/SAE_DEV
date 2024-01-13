@@ -341,12 +341,14 @@ const userId = ref(null);
 const montre = ref()
 const name = ref()
 const montreId = ref()
+const montreIdInt = ref()
 
 const braceletChosen = ref("texture-cuir-blanc.jpg")
 const fondChosen = ref("background_black01.png")
 const braceletIdChosen = ref()
 const fondIdChosen = ref()
 const boitierChosen = ref(true)
+const message = ref()
 
 const bracelets = ref([])
 const fonds = ref([])
@@ -384,7 +386,9 @@ const getName = async () => {
 }
 
 const updateMontre = async () => {
-  const response = await client.post('/update', {boitier:boitierChosen.value, bracelet_id:braceletIdChosen.value, fond_id:fondIdChosen.value}, {headers})
+  const response = await client.put('/update/' + route.params.id, {boitier:boitierChosen.value, bracelet_id:braceletIdChosen.value, fond_id:fondIdChosen.value, montre_id:montreIdInt.value}, {headers}).catch(
+    message.value = "CHOOSE ALL PARAMETERS"
+  )
   router.push('/montre-list/');
   return response.data
 }
@@ -403,6 +407,7 @@ onMounted(async ()=>{
     boitierChosen.value = montre.value.rows[0].boitier
     name.value = await getName()
     montreId.value = route.params.id
+    montreIdInt.value = parseInt(montreId.value)
 
     generate()
 
@@ -465,6 +470,7 @@ onUnmounted(()=>{
   <div class="menu">
     <div class="menu__part">ADD TO CART</div>
     <div class="menu__part" @click="updateMontre">SAVE</div>
+    <div class="menu__part message" v-if="message">{{message}}</div>
   </div>
   <div class="username" @click="router.push('/montre-list')">{{ montreId }} - {{ name }}</div>
   <RouterLink to="/cart" class="cart">CART</RouterLink>
@@ -481,7 +487,10 @@ onUnmounted(()=>{
 }
 
 
-
+.message {
+    font-size: rem(11);
+    color: lightcoral;
+}
 .firstline{
   display: flex;
   width: 100vw;
