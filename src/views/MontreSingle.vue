@@ -447,6 +447,7 @@ onMounted(async ()=>{
   <div class="menu">
     <div class="menu__part">ADD TO CART</div>
     <div class="menu__part" @click="createMontre">SAVE</div>
+    <div class="menu__part message" v-if="message">{{message}}</div>
   </div>
   <div class="username" @click="router.push('/montre-list')">{{ name }}</div>
   <RouterLink to="/cart" class="cart">CART</RouterLink>
@@ -460,7 +461,10 @@ onMounted(async ()=>{
   color: $secondary-color;
 }
 
-
+.message {
+    font-size: rem(11);
+    color: lightcoral;
+}
 
 .firstline{
   display: flex;
