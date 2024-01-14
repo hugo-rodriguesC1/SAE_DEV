@@ -445,7 +445,6 @@ onMounted(async ()=>{
       </div>
   </div>
   <div class="menu">
-    <div class="menu__part">ADD TO CART</div>
     <div class="menu__part" @click="createMontre">SAVE</div>
     <div class="menu__part message" v-if="message">{{message}}</div>
   </div>
