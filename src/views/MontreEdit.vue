@@ -342,6 +342,7 @@ const montre = ref()
 const name = ref()
 const montreId = ref()
 const montreIdInt = ref()
+const total = ref()
 
 const braceletChosen = ref("texture-cuir-blanc.jpg")
 const fondChosen = ref("background_black01.png")
@@ -409,6 +410,7 @@ onMounted(async ()=>{
     fonds.value = await getFond()
     montre.value = await getMontre(route.params.id)
     console.log("MONTRE : ",montre.value)
+    total.value = montre.value.rows[0].Total
     braceletChosen.value = montre.value.rows[0].braceletUrl
     fondChosen.value = montre.value.rows[0].fondUrl
     boitierChosen.value = montre.value.rows[0].boitier
@@ -477,6 +479,7 @@ onUnmounted(()=>{
   <div class="menu">
     <div class="menu__part" @click="addToCart">ADD TO CART</div>
     <div class="menu__part" @click="updateMontre">SAVE</div>
+    <div class="menu__part total" >TOTAL : {{ total }} €</div>
     <div class="menu__part message" v-if="message">{{message}}</div>
   </div>
   <div class="username" @click="router.push('/montre-list')">{{ montreId }} - {{ name }}</div>
@@ -618,6 +621,13 @@ onUnmounted(()=>{
             color: $primary-color;
             }
     }
+}
+
+.total {
+    &:hover {
+            background-color: $primary-color;
+            color: $secondary-color;
+            }
 }
 
 
