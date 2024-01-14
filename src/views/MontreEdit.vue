@@ -393,6 +393,14 @@ const updateMontre = async () => {
   return response.data
 }
 
+const addToCart = async () => {
+  const response = await client.post('/addtocart/' + montreId.value,{}, {headers}).catch(
+    message.value = "ERROR"
+  )
+//   router.push('/montre-list/');
+  return response.data
+}
+
 
 
 onMounted(async ()=>{        
@@ -468,7 +476,7 @@ onUnmounted(()=>{
       </div>
   </div>
   <div class="menu">
-    <div class="menu__part">ADD TO CART</div>
+    <div class="menu__part" @click="addToCart">ADD TO CART</div>
     <div class="menu__part" @click="updateMontre">SAVE</div>
     <div class="menu__part message" v-if="message">{{message}}</div>
   </div>
