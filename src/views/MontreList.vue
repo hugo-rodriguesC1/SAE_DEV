@@ -75,6 +75,7 @@ onUnmounted(()=>{
           <div class="collection__content"># <span>{{ montre.montre_id }}</span></div>
           <div class="collection__content">BOITIER : <span>{{ montre.boitier ? 'ROND' : 'CARRÉ' }}</span></div>
           <div class="collection__content">BRACELET : <span>{{ montre.braceletName }}</span></div>
+          <div class="collection__content">PRIX : <span>{{ montre.Total }}</span></div>
           <div class="collection__button">MODIFY</div>
         </div>
       </div>

@@ -13,6 +13,7 @@ const headers = { Authorization: `Bearer ${token}` };
 const name = ref()
 const montres = ref()
 const boitier = ref()
+const total = ref(0)
 
 function redirect(err) {
   if(err.response.data.error==="Token invalide"){
@@ -49,6 +50,10 @@ const Logout = () => {
 onMounted(async () => {
   name.value = await getName()
   montres.value = await getMontres()
+  for(let i=0; i<montres.value.length; i++){
+    total.value+=montres.value[i].Total
+  }
+
 });
 </script>
 
@@ -74,7 +79,12 @@ onMounted(async () => {
               <div class="collection__content"># <span>{{ montre.montre_id }}</span></div>
               <div class="collection__content">BOITIER : <span>{{ montre.boitier ? 'ROND' : 'CARRÉ' }}</span></div>
               <div class="collection__content">BRACELET : <span>{{ montre.braceletName }}</span></div>
+              <div class="collection__content">PRIX : <span>{{ montre.Total }}</span></div>
               <div class="collection__button" @click="deleteMontre(montre.montre_id)">DELETE</div>
+            </div>
+            <div class="collection__card">
+                <div class="collection__content">CHECKOUT</div>
+                <div class="collection__content">TOTAL : {{ total }} €</div>
             </div>
           </div>
         </div>
@@ -149,19 +159,19 @@ onMounted(async () => {
     }
     
     .username {
-  text-transform: uppercase;
-  position: absolute;
-  bottom: rem(0);
-  left: rem(0);
-  padding: rem(10);
-  text-align: center;
-  color: $secondary-color;
-  border-top: solid 1px $secondary-color;
-  border-right: solid 1px $secondary-color;
-  &:hover {
-    background-color: $secondary-color;
-    color: $primary-color;
-  }
+        text-transform: uppercase;
+        position: absolute;
+        bottom: rem(0);
+        left: rem(0);
+        padding: rem(10);
+        text-align: center;
+        color: $secondary-color;
+        border-top: solid 1px $secondary-color;
+        border-right: solid 1px $secondary-color;
+        &:hover {
+            background-color: $secondary-color;
+            color: $primary-color;
+        }
 }
     
     .cart {
