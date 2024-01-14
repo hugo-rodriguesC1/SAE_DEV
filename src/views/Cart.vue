@@ -32,6 +32,13 @@ const getMontres = async () => {
   )
   return response.data.rows
 }
+const deleteMontre = async (id) => {
+  const response = await client.delete('/cart/'+id, { headers }).catch(
+    redirect
+  )
+  router.go()
+  return response.data.rows
+}
 
 const Logout = () => {
   localStorage.removeItem('token');
@@ -63,15 +70,15 @@ onMounted(async () => {
             CART
           </div>
           <div class="collection__container">
-            <div class="collection__card" v-for="montre in montres" :key="montre.montre_id" @click="router.push('/montre-edit/' + montre.montre_id)">
+            <div class="collection__card" v-for="montre in montres" :key="montre.montre_id">
               <div class="collection__content"># <span>{{ montre.montre_id }}</span></div>
               <div class="collection__content">BOITIER : <span>{{ montre.boitier ? 'ROND' : 'CARRÉ' }}</span></div>
               <div class="collection__content">BRACELET : <span>{{ montre.braceletName }}</span></div>
-              <div class="collection__button">DELETE</div>
+              <div class="collection__button" @click="deleteMontre(montre.montre_id)">DELETE</div>
             </div>
           </div>
         </div>
-        <div class="username">{{ name }}</div>
+        <div class="username" @click="router.push('/montre-list')">{{ name }}</div>
         <RouterLink to="/cart" class="cart">CART</RouterLink>
     </div>
     </template>
@@ -142,16 +149,20 @@ onMounted(async () => {
     }
     
     .username {
-      text-transform: uppercase;
-      position: absolute;
-      bottom: rem(0);
-      left: rem(0);
-      padding: rem(10);
-      text-align: center;
-      color: $secondary-color;
-      border-top: solid 1px $secondary-color;
-      border-right: solid 1px $secondary-color;
-    }
+  text-transform: uppercase;
+  position: absolute;
+  bottom: rem(0);
+  left: rem(0);
+  padding: rem(10);
+  text-align: center;
+  color: $secondary-color;
+  border-top: solid 1px $secondary-color;
+  border-right: solid 1px $secondary-color;
+  &:hover {
+    background-color: $secondary-color;
+    color: $primary-color;
+  }
+}
     
     .cart {
       text-transform: uppercase;

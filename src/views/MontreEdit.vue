@@ -395,7 +395,6 @@ const updateMontre = async () => {
 
 const addToCart = async () => {
   const response = await client.post('/addtocart/' + montreId.value,{}, {headers}).catch(
-    message.value = "ERROR"
   )
 //   router.push('/montre-list/');
   return response.data
